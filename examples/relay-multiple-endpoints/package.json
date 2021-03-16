@@ -1,0 +1,28 @@
+{
+  "name": "relay-multiple-endpoints",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "gtkatakura",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 14.15.4"
+  },
+  "scripts": {
+    "graphql:schema:update:sdl": "ts-node scripts/updateSchemaSdl.ts",
+    "graphql:schema:download:all": "yarn graphql:schema:download:countries && yarn graphql:schema:download:weather",
+    "graphql:schema:download:countries": "get-graphql-schema https://countries.trevorblades.com/ --json > ./src/__downloaded__/countries-schema.json",
+    "graphql:schema:download:weather": "get-graphql-schema https://graphql-weather-api.herokuapp.com/ --json > ./src/__downloaded__/weather-schema.json"
+  },
+  "dependencies": {
+    "graphql": "^15.5.0"
+  },
+  "devDependencies": {
+    "@graphql-tools/merge": "^6.2.10",
+    "@types/node": "^14.14.35",
+    "chalk": "^4.1.0",
+    "get-graphql-schema": "^2.1.2",
+    "make-promises-safe": "^5.1.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  }
+}
