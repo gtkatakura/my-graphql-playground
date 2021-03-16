@@ -5,6 +5,7 @@ import fs from 'fs/promises'
 import { buildClientSchema, buildSchema, print, printSchema } from 'graphql'
 import { mergeSchemas, mergeTypeDefs } from '@graphql-tools/merge'
 import chalk from 'chalk'
+import { RenameTypes, wrapSchema } from '@graphql-tools/wrap'
 
 const main = async () => {
   const rootDir = path.resolve(__dirname, '..')
@@ -14,46 +15,71 @@ const main = async () => {
 
   const schemasPath = await fs.readdir(downloadedDir)
 
-  const schemas = await Promise.all(
-    schemasPath.map(async schemaPath => {
-      // const schemaString = await fs.readFile(
-      //   path.resolve(downloadedDir, schemaPath),
-      //   { encoding: 'utf-8' }
-      // )
+  const getSchema = async (schemaName: string) => {
+    const destinationFile = path.resolve(
+      generatedDir,
+      `${schemaName}.graphql`
+    )
 
-      // const schema = buildClientSchema(JSON.parse(schemaString))
-
-      const destinationFile = path.resolve(
-        generatedDir,
-        `${path.basename(schemaPath, '.json')}.graphql`
-      )
-
-      const typeDefs = await fs.readFile(destinationFile, {
-        encoding: 'ascii'
-      })
-
-      console.log(typeDefs)
-
-      return buildSchema(typeDefs)
-
-      // return buildClientSchema(typeDefs)
-
-      // const typeDefs = printSchema(schema)
-
-      // await fs.writeFile(destinationFile, typeDefs)
-
-      // console.info(
-      //   `  ${chalk.green('✔')} Generated graphql sdl to ${path.relative(
-      //     rootDir,
-      //     destinationFile
-      //   )}`
-      // )
-
-      // return schema
+    const typeDefs = await fs.readFile(destinationFile, {
+      encoding: 'ascii'
     })
-  )
 
-  const schema = mergeSchemas({ schemas })
+    return buildSchema(typeDefs)
+  }
+
+  // const schemas = await Promise.all(
+  //   schemasPath.map(async schemaPath => {
+  //     // const schemaString = await fs.readFile(
+  //     //   path.resolve(downloadedDir, schemaPath),
+  //     //   { encoding: 'utf-8' }
+  //     // )
+
+  //     // const schema = buildClientSchema(JSON.parse(schemaString))
+
+  //     const destinationFile = path.resolve(
+  //       generatedDir,
+  //       `${path.basename(schemaPath, '.json')}.graphql`
+  //     )
+
+  //     const typeDefs = await fs.readFile(destinationFile, {
+  //       encoding: 'ascii'
+  //     })
+
+  //     console.log(typeDefs)
+
+  //     return buildSchema(typeDefs)
+
+  //     // return buildClientSchema(typeDefs)
+
+  //     // const typeDefs = printSchema(schema)
+
+  //     // await fs.writeFile(destinationFile, typeDefs)
+
+  //     // console.info(
+  //     //   `  ${chalk.green('✔')} Generated graphql sdl to ${path.relative(
+  //     //     rootDir,
+  //     //     destinationFile
+  //     //   )}`
+  //     // )
+
+  //     // return schema
+  //   })
+  // )
+
+  const weatherSchema = await getSchema('weather-schema')
+
+  const schema = mergeSchemas({
+    schemas: await Promise.all([
+      getSchema('countries-schema'),
+      wrapSchema({
+        schema: weatherSchema,
+        transforms: [
+          new RenameTypes(name => name === 'Language' ? 'CountryLanguage' : name)
+        ]
+      })
+    ])
+  })
 
   const destinationFile = path.resolve(generatedDir, `schema.graphql`)
 

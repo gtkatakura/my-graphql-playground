@@ -14,6 +14,7 @@
     "graphql:schema:download:weather": "get-graphql-schema https://graphql-weather-api.herokuapp.com/ > ./src/__generated__/weather-schema.graphql"
   },
   "dependencies": {
+    "@graphql-tools/wrap": "^7.0.5",
     "graphql": "^15.5.0"
   },
   "devDependencies": {
