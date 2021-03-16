@@ -53,6 +53,8 @@ type Query {
   country(code: ID!): Country
   languages(filter: LanguageFilterInput): [Language!]!
   language(code: ID!): Language
+  getCityByName(name: String!, country: String, config: ConfigInput): City
+  getCityById(id: [String!], config: ConfigInput): [City]
 }
 
 type State {
@@ -73,62 +75,57 @@ input StringQueryOperatorInput {
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
-
-
-# enum Language {
-#   af
-#   al
-#   ar
-#   az
-#   bg
-#   ca
-#   cz
-#   da
-#   de
-#   el
-#   en
-#   eu
-#   fa
-#   fi
-#   fr
-#   gl
-#   he
-#   hi
-#   hr
-#   hu
-#   id
-#   it
-#   ja
-#   kr
-#   la
-#   lt
-#   mk
-#   no
-#   nl
-#   pl
-#   pt
-#   pt_br
-#   ro
-#   ru
-#   sv
-#   se
-#   sk
-#   sl
-#   sp
-#   es
-#   sr
-#   th
-#   tr
-#   ua
-#   uk
-#   vi
-#   zh_cn
-#   zh_tw
-#   zu
-# }
-
 enum Unit {
   metric
   imperial
   kelvin
+}
+
+type City {
+  id: ID
+  name: String
+  country: String
+  coord: Coordinates
+  weather: Weather
+}
+
+type Clouds {
+  all: Int
+  visibility: Int
+  humidity: Int
+}
+
+input ConfigInput {
+  units: Unit
+}
+
+type Coordinates {
+  lon: Float
+  lat: Float
+}
+
+type Summary {
+  title: String
+  description: String
+  icon: String
+}
+
+type Temperature {
+  actual: Float
+  feelsLike: Float
+  min: Float
+  max: Float
+}
+
+type Weather {
+  summary: Summary
+  temperature: Temperature
+  wind: Wind
+  clouds: Clouds
+  timestamp: Int
+}
+
+type Wind {
+  speed: Float
+  deg: Int
 }

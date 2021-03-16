@@ -10,8 +10,8 @@
   "scripts": {
     "graphql:schema:update:sdl": "ts-node scripts/updateSchemaSdl.ts",
     "graphql:schema:download:all": "yarn graphql:schema:download:countries && yarn graphql:schema:download:weather",
-    "graphql:schema:download:countries": "get-graphql-schema https://countries.trevorblades.com/ --json > ./src/__downloaded__/countries-schema.json",
-    "graphql:schema:download:weather": "get-graphql-schema https://graphql-weather-api.herokuapp.com/ --json > ./src/__downloaded__/weather-schema.json"
+    "graphql:schema:download:countries": "get-graphql-schema https://countries.trevorblades.com/ > ./src/__generated__/countries-schema.graphql",
+    "graphql:schema:download:weather": "get-graphql-schema https://graphql-weather-api.herokuapp.com/ > ./src/__generated__/weather-schema.graphql"
   },
   "dependencies": {
     "graphql": "^15.5.0"
