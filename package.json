@@ -1,0 +1,7 @@
+{
+  "name": "my-graphql-playground",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "gtkatakura",
+  "license": "MIT"
+}
