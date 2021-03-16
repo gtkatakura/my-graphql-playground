@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { GraphQLProvider } from './core/GraphQLProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GraphQLProvider>
+      <App />
+    </GraphQLProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
